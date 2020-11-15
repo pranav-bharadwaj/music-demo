@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <h2>please give an access for location</h2>
+   <h4 id = "err">you will get response from server</h4>
+   <p id = "lat">yours latitude is :</p>
+   <p id = "lon">yours longitude is :</p>
+   <button id = "send">send data</button>
+   <h2 id = "res"></h2>
+   <h2 id = "anotherres"></h2>
+   <script>
+       let lat ;
+       let lon;
+       if('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+           lat =  position.coords.latitude 
+           lon = position.coords.longitude
+           document.getElementById('lat').innerHTML  += lat;
+           document.getElementById('lon').innerHTML  += lon;
+});
+} else {
+ document.getElementById('err').innerHTML = "location is not support for your browser"
+}
+       document.getElementById('send').addEventListener('click',async()=>{
+           let data = {lat,lon}
+           
+          await fetch('/',{
+            method: 'POST', // or 'PUT'
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(data),
+           }).then( async (dat) =>{
+               const res = await dat.json()
+               document.getElementById('res').innerHTML = res.success
+               document.getElementById('anotherres').innerHTML = res.res
+               
+           })
+       })
+   </script>
+</body>
+</html>
